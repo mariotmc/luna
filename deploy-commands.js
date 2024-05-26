@@ -42,3 +42,15 @@ const rest = new REST().setToken(token);
     console.error(error);
   }
 })();
+
+// delete commands for guild-based commands (replace "commandId" (Server Settings -> Integrations -> Bots and Apps) and run the file)
+rest
+  .delete(Routes.applicationGuildCommand(clientId, guildId, "commandId"))
+  .then(() => console.log("Successfully deleted guild command"))
+  .catch(console.error);
+
+// delete commands for global commands (replace "commandId" (Server Settings -> Integrations -> Bots and Apps) and run the file)
+rest
+  .delete(Routes.applicationCommand(clientId, "commandId"))
+  .then(() => console.log("Successfully deleted application command"))
+  .catch(console.error);
