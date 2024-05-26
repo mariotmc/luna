@@ -13,6 +13,14 @@ module.exports = {
       return;
     }
 
+    if (interaction.isAutocomplete()) {
+      try {
+        await command.autocomplete(interaction);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     const { cooldowns } = interaction.client;
 
     if (!cooldowns.has(command.data.name)) {
