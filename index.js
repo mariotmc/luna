@@ -33,24 +33,20 @@ client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-const wait = require("node:timers/promises").setTimeout;
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isModalSubmit()) return;
+
+  if (interaction.customId === "myModal") {
+    const favoriteColor = interaction.fields.getTextInputValue("favoriteColorInput");
+    const hobbies = interaction.fields.getTextInputValue("hobbiesInput");
+    await interaction.reply({
+      content: `${interaction.user}'s favourite colour is ${favoriteColor} and their hobbies are ${hobbies}`,
+    });
+  }
+});
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-
-  if (interaction.commandName === "ping") {
-    await interaction.deferReply();
-
-    const message = await interaction.fetchReply();
-    message.react("👍");
-    console.log(message);
-
-    await wait(2_000);
-    await interaction.editReply("Pong!");
-    // await interaction.deleteReply();
-    await interaction.followUp({ content: `Ping: ${client.ws.ping}ms`, ephemeral: true });
-    return;
-  }
 
   const command = client.commands.get(interaction.commandName);
 
